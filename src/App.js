@@ -1,25 +1,80 @@
 import React from 'react';
-import logo from './logo.svg';
+import { makeStyles } from '@material-ui/core/styles';
 import './App.css';
+import {
+  BrowserRouter as Router,
+  Switch,
+  Route,
+  Link
+} from "react-router-dom";
+import { Drawer, List, ListItem, ListItemIcon, ListItemText } from "@material-ui/core";
+
+import HomeIcon from '@material-ui/icons/Home';
+import CommentIcon from '@material-ui/icons/Comment';
+import Home from './Components/Home/Home';
+import NoMatch from './Components/NoMatch/NoMatch';
+import PostDetails from './Components/PostDetails/PostDetails';
+
+const useStyles = makeStyles((theme) => ({
+  drawerPaper: {width: 'inherit' },
+  Link: { textDecoration:'none' },
+  color: theme.palette.text.prrimary
+}))
 
 function App() {
+  
+const classes = useStyles();
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+   
+    
+    <Router>
+      <div style={{display: 'flex'}}>
+      <Drawer
+      style={{ width: '240px' }}
+      variant="persistent"
+      anchor="left"
+      open={true}
+      classes={{ paper: classes.drawerPaper }}
+      >
+       
+        <List>
+        <Link to="/" className={classes.link}>
+          <ListItem button>
+            <ListItemIcon>
+            <CommentIcon />
+            </ListItemIcon>
+            <ListItemText primary={"Posts"} />
+          </ListItem>
+          </Link>
+
+          <Link to="/post/:postId" className={classes.link}>
+          <ListItem button>
+            <ListItemIcon>
+            <HomeIcon />
+            </ListItemIcon>
+            <ListItemText primary={"Exit Comments"} />
+          </ListItem>
+          </Link>
+        </List>
+
+      </Drawer>
+
+      <Switch> 
+        <Route exact path="/">
+          <Home></Home>
+        </Route>
+        <Route exact path="/post/:postId">
+          <PostDetails></PostDetails>
+        </Route>
+        <Route path="*">
+          <NoMatch/>
+        </Route>
+      </Switch>
+
+      </div>
+      
+    </Router>
+    
   );
 }
 
